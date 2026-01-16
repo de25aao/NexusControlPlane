@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="style.css" />
@@ -12,9 +12,10 @@
       <aside>
         <div class="brand">NEXUS_CONTROL</div>
         <div style="padding: 1rem 2rem">
+
           <input type="text" placeholder="Search clusters..." aria-label="Search clusters...."/>
         </div>
-        <div class="nav-links">
+        <div class="nav-links" id="nexus-link">
           <div class="nav-link active" onclick="route('dash', event)">
             Dashboard
           </div>
@@ -23,6 +24,8 @@
         </div>
         <div style="padding: 2rem">
           <button
+            title="Reveal Phantom"
+            type="button"
             class="btn"
             style="background: #1e293b; width: 40px; height: 40px"
             onclick="location.reload()"
@@ -78,7 +81,10 @@
           <div id="p-step-2" class="step-panel">
             <h3>Resource Mapping</h3>
             <div class="form-group">
-              <input type="text" placeholder="Shard ID" aria-label="Shard ID"/>
+              <label for="nodes-count"
+                >Number of Nodes
+                <input id="nodes-count" type="text" placeholder="Shard ID" />
+              </label>
             </div>
             <button class="btn btn-primary" onclick="finish('Deployment')">
               Execute
@@ -177,6 +183,7 @@
               type="text"
               id="sa-name"
               placeholder="Service account name"
+              aria-label="Account name"
             />
             <input type="text" id="sa-owner" placeholder="Owner team" aria-label="Owner team" />
             <div class="btn btn-primary" onclick="showStep('sa', 2)">Next</div>
