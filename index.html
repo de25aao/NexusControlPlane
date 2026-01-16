@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Nexus Control Plane</title>
+  </head>
+  <body>
+    <a href="#nexus-link" class="skip-link">Skip to Content</a>
+    <div id="app-root">
+      <aside>
+        <div class="brand">NEXUS_CONTROL</div>
+        <div style="padding: 1rem 2rem">
+          <input type="text" placeholder="Search clusters..." />
+        </div>
+        <div class="nav-links">
+          <div class="nav-link active" onclick="route('dash', event)">
+            Dashboard
+          </div>
+          <div class="nav-link" onclick="route('nodes', event)">Clusters</div>
+          <div class="nav-link" onclick="route('audit', event)">Audit Logs</div>
+        </div>
+        <div style="padding: 2rem">
+          <button
+            class="btn"
+            style="background: #1e293b; width: 40px; height: 40px"
+            onclick="location.reload()"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div
+          id="phantom-trigger"
+          data-alpha="X23"
+          data-beta="YZ"
+          data-gamma="42"
+          style="opacity: 0; width: 5px; height: 5px; position: absolute"
+          onclick="revealPhantom()"
+        ></div>
+      </aside>
+      <main id="viewport"></main>
+
+      <div id="modal-deploy" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-trigger" onclick="closeAll()">×</span>
+          <div id="p-step-1" class="step-panel active">
+            <h3>Provision New Cluster</h3>
+            <div class="form-group">
+              <select>
+                <option value="">-- Choose Data Center --</option>
+                <option>US-EAST-1</option>
+              </select>
+            </div>
+            <img
+              src="https://placehold.co/400x100/e2e8f0/475569?text=Visual+Load+Balance+Map"
+              alt="Visual Load Balance Map"
+            />
+            <div
+              class="btn btn-primary"
+              onclick="showStep('p', 2)"
+              style="margin-top: 10px"
+            >
+              Next Phase
+            </div>
+          </div>
+          <div id="p-step-2" class="step-panel">
+            <h3>Resource Mapping</h3>
+            <div class="form-group">
+              <input type="text" placeholder="Shard ID" />
+            </div>
+            <button class="btn btn-primary" onclick="finish('Deployment')">
+              Execute
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="modal-access" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-trigger" onclick="closeAll()">×</span>
+          <h3>Identity Access Request</h3>
+          <div
+            style="
+              margin-bottom: 1rem;
+              display: flex;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <input type="checkbox" />
+            <span>Elevated Root Access</span>
+          </div>
+          <div class="form-group">
+            <label for="f-id">User ID</label>
+            <input type="text" id="f-id" value="Admin_99" />
+          </div>
+          <div class="form-group">
+            <label for="f-id">Token</label>
+            <input type="text" id="f-id" />
+          </div>
+          <button class="btn btn-primary" onclick="finish('Request')">
+            Submit
+          </button>
+        </div>
+      </div>
+
+      <div id="modal-export" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-trigger" onclick="closeAll()">×</span>
+          <h3>System Snapshot</h3>
+          <a href="javascript:void(0)" onclick="openEgg()"
+            >Click here for details</a
+          >
+          <div
+            style="
+              height: 8px;
+              background: #f1f5f9;
+              border-radius: 4px;
+              margin: 2rem 0;
+            "
+          >
+            <div
+              style="width: 75%; height: 100%; background: var(--nexus-blue)"
+            ></div>
+          </div>
+          <p
+            style="
+              color: var(--status-active);
+              font-weight: bold;
+              text-align: center;
+            "
+          >
+            Cluster Connection Nominal
+          </p>
+          <button
+            class="btn btn-primary"
+            style="width: 100%"
+            onclick="finish('Export')"
+          >
+            Download
+          </button>
+        </div>
+      </div>
+
+      <div id="phantom-modal" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-trigger" onclick="closeAll()">×</span>
+          <h3>Transmission Received</h3>
+          <p>Unexpected anomaly detected. Enjoy this:</p>
+          <a
+            href="https://youtu.be/btPJPFnesV4?si=ei5KahPv9EPxbZNj"
+            target="_blank"
+            >Watch the video</a
+          >
+        </div>
+      </div>
+
+      <div id="modal-service" class="modal-overlay">
+        <div class="modal-content">
+          <span class="close-trigger" onclick="closeAll()">×</span>
+          <h3>Create Service Account</h3>
+
+          <div id="sa-step-1" class="step-panel active">
+            <input
+              type="text"
+              id="sa-name"
+              placeholder="Service account name"
+            />
+            <input type="text" id="sa-owner" placeholder="Owner team" />
+            <div class="btn btn-primary" onclick="showStep('sa', 2)">Next</div>
+          </div>
+
+          <div id="sa-step-2" class="step-panel">
+            <p style="font-size: 0.85rem">Select permission level</p>
+            <select id="sa-permission">
+              <option>Read Only</option>
+              <option>Read / Write</option>
+              <option>Administrator</option>
+            </select>
+            <div style="margin-top: 1rem">
+              <div class="btn btn-primary" onclick="showStep('sa', 3)">
+                Continue
+              </div>
+            </div>
+          </div>
+
+          <div id="sa-step-3" class="step-panel">
+            <p style="font-size: 0.85rem">
+              Review configuration before submission
+            </p>
+            <div style="margin-bottom: 0.5rem">
+              <strong>Name:</strong> <span id="sa-review-name"></span>
+            </div>
+            <div style="margin-bottom: 0.5rem">
+              <strong>Owner:</strong> <span id="sa-review-owner"></span>
+            </div>
+            <div style="margin-bottom: 1rem">
+              <strong>Permission:</strong>
+              <span id="sa-review-permission"></span>
+            </div>
+            <div style="color: var(--error-red); font-size: 0.8rem">
+              Configuration validation failed
+            </div>
+            <div class="btn btn-primary" onclick="finish('Service Account')">
+              Create Account
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="main.js"></script>
+    </div>
+  </body>
+</html>
